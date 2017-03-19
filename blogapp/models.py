@@ -9,6 +9,7 @@ from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
+from wagtail.wagtailsnippets.models import register_snippet
 
 
 class BlogPageTag(TaggedItemBase):
@@ -81,3 +82,23 @@ class BlogTagIndexPage(Page):
         context = super(BlogTagIndexPage, self).get_context(request)
         context['blogpages'] = blogpages
         return context
+
+
+@register_snippet
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='+'
+        )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
+    ]
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural='Blog Categories'
+
