@@ -149,3 +149,4 @@ typings/
 .yarn-integrity
 
 *.sqlite3
+media/
